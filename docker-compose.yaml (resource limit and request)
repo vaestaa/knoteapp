@@ -1,0 +1,38 @@
+name: knote-stack
+
+services:
+  app:
+    container_name: knote-app
+    image: learnitguide/knotejs:1.0
+
+    environment:
+      MONGO_URL: mongodb://mongo:27017/dev
+
+    ports:
+      - "85:3000"
+
+    depends_on:
+      - mongo
+
+    restart: unless-stopped
+
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 1000M
+        reservations:
+          cpus: "0.25"
+          memory: 256M
+
+  mongo:
+    container_name: knote-mongo
+    image: mongo:6
+
+    volumes:
+      - mongo_data:/data/db
+
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
